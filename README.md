@@ -1,6 +1,7 @@
 # openwrt_tmp
-# Thanks to Ronaldo Nunez and OpenWRT community for supporting
-# https://www.youtube.com/watch?v=iJqMEjVXKZU&ab_channel=EmbeddedMeetup
+# Thanks to Ronaldo Nunez in youtube (Intro to OpenWRT by Ronaldo Nunez),
+# and OpenWRT community for supporting
+# 
 
 Install dependency packages if compilation fails, example: gawk, python2 etc. 
 

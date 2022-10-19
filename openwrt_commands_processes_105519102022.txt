@@ -1,0 +1,1365 @@
+
+--------------------------------------------------------------
+Files of interest for channel configuration/setup/new model:
+
+./build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/drivers/net/wireless/ath/ath9k/common-init.c
+./build_dir/target-mips_24kc_musl/wireless-regdb-2020.11.20/db.txt
+package/network/utils/iw/patches/9500-iw-fes-apply-ath9k-fes_freq_-shift-bw_step.patch
+----------------------------------------------------------------------------------------------------
+#define SANDEEP_DEBUG0
+#define SANDEEP_DEBUG1
+
+#ifdef SANDEEP_DEBUG0
+	printk("SANDEEP_DEBUG0:%d:%s\n",__LINE__,__func__);
+#endif
+dump_stack();
+printk("SANDEEP_DEBUG0:%d:%s:%s\n",__LINE__,__func__,__FILE__);
+--------------------------------------------------------
+$wifi status
+$wifi config mesh
+-------------------------------------------------------------------------------------
+Firewall setting changing,
+\\wsl$\Ubuntu\home\sandeepraj\lede\package\sandeeplabs\files\etc\init.d\sysutils
+$iptables --insert zone_wan_input -j ACCEPT -p tcp --dport 5201
+$iptables --insert zone_wan_input -j ACCEPT -p udp --dport 5201
+$iptables --delete zone_wan_input -j ACCEPT -p tcp --dport 5201
+$iptables --delete zone_wan_input -j ACCEPT -p udp --dport 5201
+$lsb_release -a
+
+#/etc/init.d/firewall stop
+---------------------------------------------------------------------------------------
+https://192.168.1.1/
+Network Configuration -> Firewall -> Traffic Rules
+Enable 'Allow-iperf3' -> Save & Apply
+$iw wlan0 info
+$iperf3 -s
+$iperf3 -s -D 					--> (not blocks the console, run as a deamon process in background)
+$iperf3 -s -f K				--> (-f : format to report: adaptive, bits, Bytes, Kbits, Mbits, Gbits, KBytes, MBytes, GBytes)
+$iperf3 -s 
+
+$ssh 10.223.216.116
+$iperf3 -c 10.223.255.55		--> (10.223.255.55 is iperf server ip)
+$iperf3 -c 10.223.255.55 -t 20 	--> (t is time in seconds)
+$iperf3 -c 10.223.255.55 -t 20 -f M
+$iperf3 -c 10.223.255.55 -t 20 -f M -u		--> (server will link with udp port, by default it link with tcp)
+$iperf3 -c 10.223.255.55 -t 20 -f M -u -b 200M --> (200M is 200 Mbits/sec,-b is for bit rate, 0 for unlimited, default is 1 Mbit/sec for UDP, unlimited for TCP)
+$iperf3 -c 10.223.255.55 -t 20 -f M -u -b 0	--> (-b is bitrate, 0 is unlimited)
+$iperf3 -c 10.223.255.55 -t 20 -f M -u -b 0	-R -->(-R is Reverse test mode – Server sends, client receives)
+$iperf3 -c 10.223.255.55 -t 20 -f M -u -b 0	-R -d -->(-d is for debug log)
+$iperf3 -c 10.223.255.55 -t 20 -f M -u -b 0	-R -w 320K --> (-u is for udp, -w is for TCP window size, this sets the socket buffer, 
+															above 320K test is failing in targets)
+$iperf3 -c 10.223.255.55 -t 20 -f M -b 0 -R -w 320K 	--> (-w is for TCP window size, this sets the socket buffer, 
+															above 320K test is failing in targets)
+
+$iperf3 -c 10.223.255.55 -t 20 -f M -b 0 -R -w 320K -P 4 --> (-p is for parallel connections, The number of simultaneous connections to make to the server. Default is 1.)
+$iperf3 -c 10.223.255.55 -t 20 -f M -b 0 -R -w 320K -P 8
+$iperf3 -c 10.223.255.55 -t 20 -f M -b 0 -w 320K -P 4
+$iperf3 -c 10.223.255.55 -t 20 -f M -b 0 -R -w 320K -M 9216 --> (above 9216 test is failing to start, -M is for set the TCP maximum segment size (MSS). 
+																	The MSS is usually the MTU - 40 bytes for the TCP/IP header. 
+																	For ethernet, the MSS is 1460 bytes (1500 byte MTU).)
+$iperf3 -c 10.223.0xda.0xd2 -k100000000000	--> k number of packets/blocks to transmit
+$iperf3 -c 10.223.0xda.0xd2 -n100000000000	--> n number of buffers to transmit with buffer length of 128KB for TCP, 8KB for UDP. 
+$iperf3 -c 10.223.0xda.0xd2 -l 16		--> l is length of buffer size in KB to transmit from iperf3. Default buffer length is 128KB for TCP, 8KB for UDP. 
+
+Preferred iperf test,
+$iperf3 -s
+$iperf3 -u -R -b 200M -t 20 -c 10.223.255.55
+
+$batctl if
+$batctl o
+$batctl n
+$iw list
+$iw dev wlan0 scan
+$iw dev wlan0 set channel 9 ?
+$iw dev wlan0 set channel 9 5MHz
+$iwlist channel
+
+$fes_model.sh get 
+$fes_model.sh get parent
+$fes_model.sh set RM-915-2J-XS
+$fes_model.sh set MB-0001-2L-X	--> after changing the model, factory reset is needed. 
+$sr_personality --helix
+$sr_personality -w
+$uci show wireless
+$iw wlan0 info
+$uci set wireless.radio0.channel=13
+$uci set wireless.radio0.chanbw='5'
+$uci commit wireless
+$wifi (wifi command may not work, so try /etc/config/network)
+$uci commit
+$uci show wireless
+$iw wlan0 info
+$wifi --> (it will reset the wifi interface wlan0)
+$iw wlan0 info
+$uci show wireless
+$uci show luci
+$fes_model.sh get
+$ls /usr/share/.sandeeplabs/fes
+$ls /etc/banner
+
+$iw phy <phyname> set channel <channel> [HT20|HT40+|HT40-]
+$iw dev <devname> set channel <channel> [HT20|HT40+|HT40-]
+$iw dev wlan0 set channel 1 [HT20|HT40+|HT40-]
+$iw dev wlan0 set freq 2412 [HT20|HT40+|HT40-]
+$ip link set wlan0 down
+$ip link set wlan0 up
+$iw phy0 info
+$iw phy1 info
+
+$iwconfig wlan0
+$iwconfig wlan0 freq 2.484G
+
+$iw reg get		--> regulatory information
+$iw reg set US
+
+$wifi status
+
+To change mode to mesh using CLI, the command is as below:
+$/usr/share/simpleconfig/setup.sh mesh 
+$/usr/sbin/fes_apply_defaults.sh
+$/etc/init.d/network restart
+$/etc/init.d/wearable-ctrld restart
+Other mode can be: 
+meshmerize | mesh_and_ap | mesh_gw | mesh_multi | wds_ap | wds_ap_gw | wds_client
+You can refer to GUI simple config menu to know more about these options. 
+
+$/usr/share/simpleconfig/setup.sh mesh ap_no_fes	--> wlan1 is argument 1, wlan0 is argument 2, setup.sh is argument 0
+$/usr/share/simpleconfig/setup.sh mesh none
+$/usr/share/simpleconfig/setup.sh wds_ap ap_no_fes
+$/usr/share/simpleconfig/setup.sh wds_ap none
+$/usr/share/simpleconfig/setup.sh wds_client ap_no_fes
+$/usr/share/simpleconfig/setup.sh wds_client none
+
+$iw wlan0 station dump
+$iw wlan0 station dump | grep Station
+
+debug filesystem to change the registers of a driver,
+$cat /sys/kernel/debug/ieee80211/phy0/ath9k/regidx 
+$cat /sys/kernel/debug/ieee80211/phy0/ath9k/regval 
+$cat /sys/kernel/debug/ieee80211/phy0/ath9k/regdump
+
+to select FES external antenna
+$uci set wearable.main.wifi_antennas='1'
+
+$ubus -v call network.wireless status
+$ip netconf show wlan1
+
+$ifconfig enp0s3 192.168.178.32/24
+$ifconfig enp0s3 192.168.178.32 netmask 255.255.255.0
+$nmcli connection show
+$sudo nmcli connection up enp0s8
+$ifconfig
+$ip -4 neighbor
+$ip a
+
+$ifconfig
+$ifconfig wlan0
+$ifconfig wlan0 down
+$ifconfig wlan0 up
+$ip link set down dev wlan0
+$ip link set up dev wlan0
+--------------------------------------------------------------------------------------------
+To setup dynamic meshmode or any mode,
+or if ssh connection is failing to connect to 192.168.1.1,
+make sure pc ethernet connection is in the same class as target,
+Ip assignment		: Manual
+ipv4 address		: 192.168.1.100
+ipv4 subnet prefix	: 24
+ipv4 gateway		: 192.168.1.1
+----------------------------------------------------------------------------------
+usb type-c conncetion ip settings for target to host connection,
+Ip assignment		: Manual
+ipv4 address		: 10.223.189.234
+ipv4 subnet prefix	: 16
+ipv4 gateway		: blank
+disabled ipv6 but not sure, whether required or not. 
+-----------------------------------------------------------------------------------
+connection debugging techniques and useful commands,
+$dmesg | tail 	--> disconnect and connect the cable and see the interface name
+$route -n
+$ping6 fe80::%eth0
+$ping6 ff00::%eth0			--> ff00::/8
+$ip -6 neighbour
+$ip a show br-wan
+$ssh root@fe80::230:1aff:fe4f:3df9%eth0
+$sudo ip route add default via 10.0.51.252
+
+scp for ipv6,
+$scp filename userfoo@[fe80::ea9a:8fff:fe67:190d%eth0]:/tmp/
+
+$arp -a
+>arp -a
+
+$ip route
+$ip a
+$nmtui
+-----------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------
+/etc/config/
+​led_blink
+​$cat led_blink
+$cat /etc/init.d/startup_blink
+
+$/etc/init.d/startup_blink enable 
+​$/etc/init.d/startup_blink start
+--------------------------------------------------------------
+
+------------------------------------------------------------------------------
+network booting using tftp server-client,
+1) 
+In windows OS setup tftpserver,
+Make sure your firewall is off in your computer. Setup tftpserver with solarwinds or anyother supported software,
+https://www.solarwinds.com/free-tools/free-tftp-server/registration?a_bid=5306571d&CMP=BIZ-PAP-CMPRTCH-FreeTool-TFTP-DL&a_aid=BIZ-PAP-CMPRTCH
+
+Configure computer's ethernet ip as tftp server ip in menu,
+File->Config->Server Bindings->Use custom server binding(refer to currently available bindings there)
+Press 'OK' or 'General->Start' options to start the tftp server. 
+
+Or in ubuntu os setup tftpserver,
+$sudo apt-get install xinetd tftpd tftp
+$sudo mkdir /tftpboot
+$sudo chmod -R 777 /tftpboot
+$sudo chown -R nobody /tftpboot
+$vim /etc/xinetd.d/tftp
+service tftp
+{
+    protocol        = udp
+    port            = 69
+    socket_type     = dgram
+    wait            = yes
+    user            = nobody
+    server          = /usr/sbin/in.tftpd
+    server_args     = /tftpboot
+    disable         = no
+}
+
+$sudo service xinetd restart
+$sudo cp image.bin /tftpboot/dl.bin
+$tftp 192.168.1.33
+
+$ifconfig -> to see the ip of computer with ethernet.
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.33  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a059:9134:22f5:e930  prefixlen 64  scopeid 0xfd<compat,link,site,host>
+        ether 38:f3:ab:e0:5a:09  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+		
+
+
+2) enter into u-boot prompt by pressing escape just after reboot.
+3) run "printenv" to see the environment settings
+ath> printenv
+bootargs=
+bootcmd=bootm 0x9f0c0000
+bootdelay=1
+baudrate=115200
+ethaddr=0x00:0xaa:0xbb:0xcc:0xdd:0xee
+production=no
+serverip=192.168.1.33
+ipaddr=192.168.1.34
+stdin=serial
+stdout=serial
+stderr=serial
+ethact=eth0
+
+Environment size: 214/262140 bytes
+ath>
+4) change the IP address settings so that you can contact the host PC 
+ath>set serverip 192.168.1.33
+ath>saveenv
+ath>set ipaddr 192.168.1.34
+ath>saveenv
+ath> printenv
+bootargs=
+bootcmd=bootm 0x9f0c0000
+bootdelay=1
+baudrate=115200
+ethaddr=0x00:0xaa:0xbb:0xcc:0xdd:0xee
+production=no
+serverip=192.168.1.33
+ipaddr=192.168.1.34
+stdin=serial
+stdout=serial
+stderr=serial
+ethact=eth0
+
+Environment size: 214/262140 bytes
+ath>
+
+5) verify with "ping <IP ADDRESS OF PC>"
+ath> ping 192.168.1.33
+eth0 link down
+enet1 port1 up
+dup 1 speed 1000
+Using eth1 device
+host 192.168.1.33 is alive
+ath>
+
+6) boot from tftp server,
+ath> tftpboot 0x80060000 dl.bin
+eth0 link down
+Using eth1 device
+TFTP from server 192.168.1.33; our IP address is 192.168.1.34
+Filename 'dl.bin'.
+Load address: 0x80060000
+Loading: T T T #################################################################
+					.
+					.
+					.
+         #################################################################
+         #################################################################
+         ###############
+done
+Bytes transferred = 12386308 (bd0004 hex)
+ath>
+
+7) erase flash partition,
+ath> sf erase 0xC0000 +${filesize}
+SF: 12451840 bytes @ 0xc0000 Erased: OK
+ath>
+8) write image to partition,
+ath> sf write 0x80060000 0xC0000 ${filesize}
+SF: 12386308 bytes @ 0xc0000 Written: OK
+ath>
+9) do reset,
+ath>reset
+
+4 commands after tftp setup,
+ath>tftpboot 0x80060000 dl.bin;sf erase 0xC0000 +${filesize};sf write 0x80060000 0xC0000 ${filesize};reset
+-------------------------------------------------------------------------------- 
+$cd /home/sandeepraj/lede/build_dir/target-mips_24kc_musl/linux-ar71xx_generic/linux-4.14.221
+$find . -iname "System.map"
+$cd ./build_dir/target-mips_24kc_musl/linux-ar71xx_generic/linux-4.14.221/
+$ls -l
+$grep kmem_cache_alloc System.map
+//$objdump -D -S -mmips32r1 --show-raw-insn --prefix-addresses --line-numbers vmlinux > vmlinux.objdump
+$gdb vmlinux.o
+
+
+-----------------------------------------------------------------------------------
+ssh, scp from ubuntu sometimes stop due to man in middle attack warning. You can use the following to ignore that.
+# ssh to ignore  WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+$ssh -q -o "StrictHostKeyChecking no" 192.168.1.1 
+ Or to permanently remove all warnings for this one server, edit your ~/.ssh/config file and add the following lines:
+ 
+Host 192.168.1.1 // or "Host *" for all the host
+StrictHostKeyChecking no   
+Save the file and change mod 
+ 
+$ chmod 400 ~/.ssh/config
+
+You're good to go without the warning.
+
+Another way is,
+$ssh-keygen -f "/home/sandeepraj/.ssh/known_hosts" -R "192.168.1.1"
+
+When executing ssh command recursively this helps,
+ssh root@10.223.0x26.0xcd -y "ifconfig"
+
+Host commands for 2 node targets,
+the output of "iw wlan0 station dump | grep Station" gives some device's MAC, 
+to construct a ip as 10.223.<2nd least significant byte from MAC>.<1st least significant byte from MAC>
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "iw wlan0 station dump | grep Station"
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd0 -y "iw wlan0 station dump | grep Station""
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd3 -y "iw wlan0 station dump | grep Station""
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd9 -y "iw wlan0 station dump | grep Station""
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd6 -y "iw wlan0 station dump | grep Station""
+
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ping -c 1 10.223.0x26.0xd0"
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd6 -y "ping -c 1 10.223.0x26.0xd0""
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd3 -y "ping -c 1 10.223.0x26.0xd0""
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd9 -y "ping -c 1 10.223.0x26.0xd0""
+
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "iperf3 -s -D"
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "iptables --insert zone_wan_input -j ACCEPT -p tcp --dport 5201"
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd6 -y "iperf3 -c 10.223.0xda.0xd2 -t 50400"" | tee /tmp/test_log_184925112021.txt
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "iptables --delete zone_wan_input -j ACCEPT -p tcp --dport 5201"
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "kill -9 \`pidof iperf3\`"
+
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd0 -y "iperf3 -c 10.223.0xda.0xd2 -k60480000"" | tee /tmp/test_log_152426112021.txt
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd3 -y "iperf3 -c 10.223.0x26.0xd6 -k60480000"" | tee /tmp/test_log_152726112021.txt
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd0 -y "iperf3 -c 10.223.0xda.0xd2 -n50000000"" | tee /tmp/test_log_144201122021.txt	--> It took 15 seconds with 26.5 Mbits/Sec
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd0 -y "iperf3 -c 10.223.0xda.0xd2 -n4000000"" | tee /tmp/test_log_144201122021.txt	--> It took 1.34seconds with 26.5 Mbits/Sec
+$ssh -q -o "StrictHostKeyChecking no" root@192.168.1.1 "ssh root@10.223.0x26.0xd3 -y "iperf3 -c 10.223.0x26.0xd6 -n345600000000"" | tee /tmp/test_log_164001122021.txt --> using it for 86400 seconds 
+--------------------------------------------------------------------------------------------------------------------------------------------------
+$iperf -c $ipaddr -t 14400 -i 1 -d
+$echo 1 > /sys/kernel/debug/ieee80211/phy0/ath9k/reset
+------------------------------------------------------------------
+/home/sandeepraj/lede1/package/sandeeplabs/files/etc/init.d/sysutils
+-------------------------------------------------------------------
+\\wsl$\Ubuntu\home\sandeepraj\lede\build_dir\target-mips_24kc_musl\linux-ar71xx_generic\linux-4.14.221\Documentation\networking\batman-adv.rst
+--------------------------------------------------------------------------
+lede/package/sandeeplabs/files/usr/sbin/ath9k_watchdog
+lede/package/sandeeplabs/files/usr/share/.sandeeplabs/config/ath9k_watchdog
+------------------------------------------------------------------------------
+./build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/drivers/net/wireless/ath/ath9k
+--------------------------------------------------------------------------------
+git commands,
+$git config --list
+$git config --global user.name "Sandeep Raj B"
+$git config --global user.email "sandeep.betanapalli@sandeeplabs.com"
+$git clone git@bitbucket.org:sandeeplabs/lede.git
+$git clone git@bitbucket.org:sandeeplabs/production_code.git
+$git clone git@bitbucket.org:sandeeplabs/openwrt-routing.git
+$cd lede/
+$git branch -a
+$git pull
+$git config pull.rebase true --> when the some commits are deleted in remote main branch. 
+				then rebase will link all the existing commits in local branch 
+				with remote main branch commits. 
+$git status
+$git config --list
+$git branch -a
+$git tag
+$git checkout firmware-2021-04.4
+$git status
+$git checkout -f firmware-2021-04.4
+$git status
+$git branch
+$./config.sh -h
+$git log
+$git log -- <file_name>		--> to see the commits done for that file.
+$ls
+$git branch
+$./config.sh
+$./config.sh -w 	--> with fips
+$./config.sh -r 	--> for release
+$./config.sh -r -k
+$make -j16
+$make -j8
+$git cherry-pick b10f032d8dd037c	--> dennis commit to enable debug logs, as below file in config-4.14
+In file lede/target/linux/ar71xx/config-4.14
+-CONFIG_CMDLINE="rootfstype=squashfs noinitrd loglevel=0"
++CONFIG_CMDLINE="rootfstype=squashfs noinitrd"
+-CONFIG_MESSAGE_LOGLEVEL_DEFAULT=0
+
+$make target/linux/{clean,prepare} V=s QUILT=1 && make V=s -j16
+$make target/linux/prepare V=s QUILT=1 && make V=s -j16
+$make clean		--> deletes folders /bin,/build_dir
+$make dirclean		--> deletes folders /bin,/build_dir,/staging_dir,/toolchain,/tmp,/logs
+$make distclean	--> deletes everything except the plain pulled source code.
+$make target/linux/clean
+$make package/base-files/clean
+$make package/luci/clean
+$make V=s -j16
+$git branch
+$git describe		--> to see openwrt version
+$git checkout ad9e46f7156c165714a475b626dd26ff1166035e
+
+$git tag -n
+$git tag -a <tag_name> -m "message" // Tag the latest HEAD
+$git tag -a <tag_name> <commit_sha> -m "message" // Tag to the commit
+$git push –-tags // Push the tags to remote
+$git tag -d <tag_name>  //Delete the tag
+ 
+Cherry pick a commit to main-branch 
+$git checkout sandeeplabs/openwrt-v19.07.7  //MOve to main-branch
+$git cherry-pick b10f032d8dd037c
+$git status
+$git push
+
+$git diff <previous commit id>		--> (use previous commit id to see changes after the given commit id)
+$git log
+$git branch
+$git branch -a
+$git pull
+$git status
+$git log
+$git add <files>
+$git config --list
+$git commit -s -m "commit message"
+$git push
+$git commit --amend -m "New commit message"			--> usefull in changing the most recent commit message
+$git branch –delete <branchname>
+
+$cat .gitignore
+$ls build_dir/
+$git add --force build_dir/target*/
+$git push
+$git log --author=Mario
+$git log --grep "commit message"
+$git log -- file_name
+$rsync -avm --include='*.'{c,h,sh} -f 'hide,! */' ~/working/lede_5ghz/build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/ ~/working/backupcode/build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/
+
+shows commit id and author line by line,
+$git blame -- package/base-files/files/sbin/sysupgrade
+
+$git revert file
+$git log --grep regulatory	-> it searches for regulatory word in git commits
+$git log --graph --all --online
+$git log --graph --all
+
+$cd ~/lede/
+$git diff > changes.patch
+$git apply changes.patch
+$git apply -R changes.patch
+
+To generate patch file between 2 files for git,
+$git diff --no-index db_backup.txt db.txt > 9507-Add-global-regulations-GV_domain.patch
+
+$git reset --soft HEAD~1	--> Delete the most recent commit, without destroying the work you've done
+$git reset --hard HEAD~1	--> Delete the most recent commit and remove changes
+
+$git diff --no-index db_backup.txt db.txt > file.patch
+$interdiff file.patch blank.patch > file_reverse.patch
+or
+$$git diff --no-index db.txt db_backup.txt > file_reverse.patch
+$patch -p1 new_file_with_changes.txt file_reverse.patch	--> it reverts the changes in new_file_with_changes.txt to old_file_without_changes.txt
+
+$git branch
+$git branch -a
+$git checkout -b 2022-04-26_gv_domain
+$git switch 2022-04-26_gv_domain
+$git push origin 2022-04-26_gv_domain		--> for first time
+$git push origin origin/2022-04-26_gv_domain	--> from next time
+
+If git checkout branch is giving an error due to uncommitted file changes,
+we can stash the changes to save temporarily without commiting to switch the branch. 
+$git checkout firmware-2021-04.4 --> give an error due to uncommited file changes, 
+$git stash push
+$git checkout new-branch
+$git checkout previous-branch
+$git stash pop
+
+$cd /mnt/2f085d66-eab7-49a7-9190-206bc3512f78/luci/
+$git status 
+$git diff
+$git branch 
+* 2022-10-11_flashtime_with_keep
+  sandeeplabs/openwrt-v19.07.7
+$git add modules/luci-mod-admin-full/luasrc/view/admin_system/applyreboot.htm 
+$git log
+$git commit -s -m "luci-mod-admin-full: flash time base counter is set to 270 seconds"
+$git log
+$git push origin 2022-10-11_flashtime_with_keep 
+$git log
+$git branch 
+$git switch sandeeplabs/openwrt-v19.07.7 
+  2022-10-11_flashtime_with_keep
+* sandeeplabs/openwrt-v19.07.7
+$git branch 
+$git pull
+$git branch 
+$git log
+$git branch 
+$git log --graph --all --online
+$git log --graph --all
+$git checkout 2022-10-11_flashtime_with_keep
+$git branch 
+$git log
+$git branch 
+$git checkout sandeeplabs/openwrt-v19.07.7
+$git pull
+$git log
+$git branch 
+$git checkout 2022-10-11_flashtime_with_keep
+$git log
+$git branch 
+$git rebase sandeeplabs/openwrt-v19.07.7 2022-10-11_flashtime_with_keep
+$git branch 
+$git log
+$git branch 
+$git push origin 2022-10-11_flashtime_with_keep 
+$git log
+$git checkout sandeeplabs/openwrt-v19.07.7
+$git log
+$git push
+$git branch 
+$git checkout 2022-10-11_flashtime_with_keep
+$git branch -a
+$git push origin origin/2022-10-11_flashtime_with_keep
+$git branch 
+$git log
+$git branch 
+$git checkout sandeeplabs/openwrt-v19.07.7 
+$git branch 
+$git log
+$git merge 2022-10-11_flashtime_with_keep 
+$git branch 
+$git log
+$git branch 
+$git push
+$git log
+------------------------------------------------------------------------------------
+CONFIG_KERNEL_KALLSYMS=y
+CONFIG_KERNEL_DEBUG_INFO=y
+CONFIG_COLLECT_KERNEL_DEBUG=y
+at the end of file lede/config.in.common
+
+Better to do it with,
+$make menuconfig
+----------------------------------------------------------------------
+Files of interest for channel configuration/setup/new model:
+
+./build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/drivers/net/wireless/ath/ath9k/common-init.c
+./build_dir/target-mips_24kc_musl/wireless-regdb-2020.11.20/db.txt
+package/network/utils/iw/patches/9500-iw-fes-apply-ath9k-fes_freq_-shift-bw_step.patch
+------------------------------------------------------------------------------------------------
+$cat /proc/mtd
+$cat /proc/cmdline
+$umount /overlay; firstboot -y && reboot	--> factory reset
+-------------------------------------------------
+when ip of the target is still linked with previous image configuration,
+it is can be issue with overlay partition sustaining previous data. 
+so unmount and restore to default filesystem with below commands. 
+
+$umount /overlay; firstboot -y && reboot
+-----------------------------------------------------------------
+luci work around,
+/usr/lib/lua/luci/view/mini/overview.htm
+/usr/lib/lua/luci/view/admin_network/wifi_overview.htm:Smart Radio model: <%=parent_fes_model%>
+/usr/lib/lua/luci/view/mini/wifi_overview.htm:Smart Radio model: <%=parent_fes_model%>
+/home/sandeepraj/lede/build_dir/target-mips_24kc_musl/luci-mod-admin-mini/luasrc/view/mini/overview.htm/home/sandeepraj/lede/build_dir/target-mips_24kc_musl/luci-mod-admin-full/luasrc/view/admin_network/wifi_overview.htm
+/home/sandeepraj/lede/build_dir/target-mips_24kc_musl/luci-mod-admin-mini/luasrc/view/mini/wifi_overview.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-full\luasrc\view\admin_status\index.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-mini\luasrc\view\mini_status\index.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-mini\luasrc\view\mini\overview.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-full\luasrc\view\admin_status\index.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-mini\luasrc\view\mini\overview.htm
+\\wsl$\Ubuntu\home\sandeepraj\luci\modules\luci-mod-admin-mini\luasrc\view\mini_status\index.htm
+
+
+---------------------------------------------------------------------
+Voltage range,
+Pancake 		-> 9v
+Helix 			-> 5v
+Remaining all 		-> 6v-42v
+
+----------------------------------------------------------------------
+Install dummy monitor,
+$sudo apt-get install xserver-xorg-video-dummy
+
+Copy below into 2 files, /usr/share/X11/xorg.conf.d/xorg.conf,/etc/X11/xorg.conf,
+
+Section "Device"
+    Identifier  "Configured Video Device"
+    Driver      "dummy"
+EndSection
+
+Section "Monitor"
+    Identifier  "Configured Monitor"
+    HorizSync 31.5-48.5
+    VertRefresh 50-70
+EndSection
+
+Section "Screen"
+    Identifier  "Default Screen"
+    Monitor     "Configured Monitor"
+    Device      "Configured Video Device"
+    DefaultDepth 24
+    SubSection "Display"
+    Depth 24
+    Modes "1024x800"
+    EndSubSection
+EndSection
+
+To apply display settings, restart the pc.
+$restart 
+
+Remove dummy monitor,
+$sudo apt-get remove xserver-xorg-video-dummy
+$sudo apt-get remove --auto-remove xserver-xorg-video-dummy
+--------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------
+cscope setup,
+$find . -name "*.c" -o -name "*.h" > cscope.files
+$cscope -q -R -b -i cscope.files 
+$cscope -d
+
+ctags setup,
+$ctags -R .
+$vim
+
+keyboard shortcuts are common to ctags and cscope,
+$vim or $cscope -d --> start
+:ts main
+ctrl+} --> to go inside the function or variables
+ctrl+t --> to come back from the function or variables
+:ts --> to see list of functions or variables
+:q or ctrl+z --> to quit
+
+ctags in vs code,
+Install ctags-support extension in vs code,
+$ext install ctags-support
+$ctags -R -f .tags
+-----------------------------------------------------------------------------------
+sudo add-apt-repository ppa:yannubuntu/boot-repair
+sudo apt-get update
+sudo apt-get install -y boot-repair && boot-repair
+---------------------------------------------------------------------------------
+$sysutils savelog
+$scp /tmp/savelogs.tar.gz
+$sudo ifconfig enp3s0 192.168.153.11 netmask 255.255.255.0 up
+
+---------------------------------------------------------------
+compilation process,
+3.1	Build the firmwares
+1.	Install packages needed for OpenWrt in Ubuntu
+$ sudo apt update; sudo apt install -y build-essential ccache ecj fastjar file g++ gawk gettext git java-propose-classpath libelf-dev libncurses5-dev libncursesw5-dev libssl-dev python python2.7-dev python3 unzip wget python3-distutils python3-setuptools rsync subversion swig time xsltproc zlib1g-dev
+try below,
+$sudo apt-get update
+$sudo apt-get install git-core build-essential libssl-dev libncurses5-dev unzip gawk zlib1g-dev
+$sudo apt-get install subversion mercurial
+2.	Download sandeeplabs OpenWRT repo
+$ git clone git@bitbucket.org:sandeeplabs/lede.git (For main sandeeplabs OpenWRT code)
+$ git clone git@bitbucket.org:sandeeplabs/luci.git (For Luci code)
+3.	Configure the build 
+$ cd lede
+$ ./config.sh (for normal build) OR
+$ ./config.sh -h (list all build options)
+4.	Build the firmwares 
+$ make -j$(nproc) // Fast compiling (First build takes about several hours. Subsequent build takes 10-30mins)
+$ make -j16 V=s // For 8 core processor 16 threads are possible, so maximum 16 can be given. 
+$ make // Slow compiling
+5.	Final firmwares are in bin/targets/ar71xx/generic/
+sandeep-labs-firmware-*-smartradio_tx99_rwart-squashfs-sysupgrade.bin: TX99 firmware – for HW team development (created by ./config.sh -t option)
+sandeep-labs-firmware-*-smartradio_rwart-squashfs-sysupgrade.bin: ART partition writable firmware – for development
+sandeep-labs-firmware-*-smartradio -squashfs-sysupgrade.bin: Normal firmware – for customer
+--------------------------------------------------------------------------------------------------
+change mode ap->mesh->client etc you can copy from GUI in Simpleconfig menu here:
+/luci/applications/luci-app-simpleconfig/luasrc/controller/simpleconfig.lua
+ret = luci.sys.call("/usr/share/simpleconfig/setup.sh " .. script_parms)
+In practical you should call this command from ssh
+$/usr/share/simpleconfig/setup.sh mesh
+
+For the wireless GUI menu, you can look at 
+luci/modules/luci-mod-admin-full/luasrc/model/cbi/admin_network/wifi.lua
+
+-----------------------------------------------------------------
+for Mesh mode
+ 
+$iw dev wlan0 mesh chswitch <CHANNEL> <#BEACONS>
+
+(https://trello.com/c/tZbnSlcg)
+
+for AP/Client use
+ 
+
+hostapd_cli chan_switch <# beacons> <FREQ> ht
+------------------------------------------------------------------
+ssh -q -o StrictHostKeyChecking=no root@192.168.1.1 "iw wlan0 info"
+------------------------------------------------------------------
+dBm = 10lg(Power value/1 mW)
+-------------------------------------------------------------
+$ln -s <target file name> <soft link file name>
+------------------------------------------------------------------
+target ip and mac address of br-wan,
+10.223.255.55	-> C4:93:00:0E:FF:38
+10.223.255.193	-> C4:93:00:0E:FF:C2
+10.223.45.151	-> C4:93:00:26:97:56	-> pancake
+10.223.61.248	-> 00:30:1A:4F:3D:F9	-> pancake
+---------------------------------------------------------------------
+please make a copy of the XC8 compiler from the lab's PIC 
+programming PC at the window (behind Dennis' table) 
+so that later you can copy into your own MPLabx installation 
+
+C:\Program Files (x86)\Microchip\xc8\v1.37
+It is only 966MB
+You can install any MPLab X version above 5.20
+
+--------------------------------------------------------------------
+ssl error for test automation login solution,
+https://stackoverflow.com/questions/45755084/curl-how-to-get-a-cookie-from-after-login-to-send-in-a-curl-command
+https://www.mit.edu/afs.new/sipb/user/ssen/src/curl-7.11.1/docs/curl.html
+https://curl.se/docs/manual.html
+https://linuxize.com/post/curl-command-examples/
+
+$curl -v -k --cookie-jar cookies.txt --form luci_password= --form luci_username=root https://192.168.153.1/cgi-bin/luci 
+$curl -v -k -b cookies.txt https://192.168.153.1/cgi-bin/luci
+--------------------------------------------------------------------
+$sudo mount -o remount,rw /dev/nvme0n1p5 /media/sandeepraj/New\ Volume
+----------------------------------------------
+email signature html code,
+
+<div><br><p class="MsoNormal">Thank you. </p>
+<p class="MsoNormal">&nbsp;</p>
+<p class="MsoNormal"><span lang="EN-US">Best Regards,</span></p>
+<p class="MsoNormal"><span lang="EN-US">Sandeep Raj</span></p>
+<p class="MsoNormal"><a href="http://www.sandeeplabs.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?hl=en&q=http://www.sandeeplabs.com/&source=gmail&ust=1635618284625000&usg=AFQjCNHjPOSWDqqzqTvUvXqsrAdu2vxfbg"><span style="color:rgb(5,99,193)">www.sandeeplabs.com</span></a></p>
+<p class="MsoNormal"><img src="https://mlluxhsiejye.i.optimole.com/ClUzVhY.S-3Q~49719/w:auto/h:auto/q:75/https://sandeeplabs.com/wp-content/uploads/sandeep-Labs-logo_new-colors-1.svg" alt="image.png" width="200" height="64"></p>
+<p class="MsoNormal" style="background-image:initial;background-position:initial;background-size:initial;background-repeat:initial;background-origin:initial;background-clip:initial"><span style="font-size:10pt;font-family:Roboto;color:rgb(13,94,151)">Resilient
+Private Wireless Networks</span></p>
+</div></div>
+
+-------------------------------------------------------------------
+ubuntu hibernate command,
+$sudo systemctl hibernate
+
+reference: https://askubuntu.com/questions/1240123/how-to-enable-the-hibernate-option-in-ubuntu-20-04
+-------------------------------------------------------------------
+Print time on terminal,
+
+run below command in terminal or execute this script to sustain the time. 
+$export PS1='[\D{%H:%M:%S-%d-%m-%Y}]\u@\h:\w$'
+
+add below line in .bashrc to sustain time even after reboot.
+PS1='[\D{%H:%M:%S-%d-%m-%Y}]\u@\h:\w$'
+------------------------------------------------------------------------
+6 node test bed ip addresses,
+10.223.0x26.0xd0 --> central node
+10.223.0x26.0xd2 --> host connected
+10.223.0x26.0xcd
+10.223.0x26.0xd6
+10.223.0x26.0xd9
+10.223.0x26.0xd3
+-------------------------------------------------------------------
+bootchart preparation in openwrt,
+1. clone the openwrt source code and configure before compilation,
+	$git clone git@bitbucket.org:sandeeplabs/lede.git
+	$cd lede
+	$./config.sh
+2. enable bootchart flags in openwrt configuration,
+	$pwd
+	/home/sandeepraj/lede/
+	$make menuconfig
+	BUSYBOX_CONFIG_BOOTCHARTD
+	BUSYBOX_CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER
+	BUSYBOX_CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE
+	Location: -> Base system -> busybox -> Init Utilities -> bootchartd (10 kb) 
+	https://github.com/openwrt/openwrt/blob/master/package/utils/busybox/config/init/Config.in
+	
+3. compile after the source code and load the image into target, 
+	$make -j16
+	$scp sandeep-labs-firmware-2021-08.2-84-g930214de89-ar71xx-generic-smartradio_rwart-squashfs-sysupgrade.bin root@192.168.1.1:/tmp/
+	$ssh root@192.168.1.1
+	$cd /tmp/
+	$sysupgrade -n sandeep-labs-firmware-2021-08.2-84-g930214de89-ar71xx-generic-smartradio_rwart-squashfs-sysupgrade.bin
+4. enable the bootchart in the target,
+	$bootchartd init
+	or
+	$bootchartd start
+	$bootchartd stop
+	$cd /tmp/log/
+	$ls
+	bootlog.tgz	--> 	it consists the bootlog information of all processes. 
+				You may need to initialise and stop the bootchartd as per requirement.
+				https://openwrt.org/docs/techref/process.boot
+				https://elinux.org/Bootchart
+	
+5. After collecting the bootlog.tgz file with all the processes details, need to analys the boot time of each process. 
+   There is a python gui tool which converts this logs to a visible image to understand easily. 
+   The tool is at https://github.com/xrmx/bootchart 
+	a. Install ubuntu 16.04 LTS in virtual box and update it, copy bootlog.tgz file to home.
+	b. $git clone https://github.com/xrmx/bootchart
+	c. $cd bootchart
+	d. $make
+	e. $./pyboochartgui.py ../bootlog.tgz	--> make sure you have python2, python2.7.
+	This will generate the bootchart.png file. 
+	
+Note: 
+pybootchartgui-r124.tar.gz is the official code But it is not working in ubuntu 18, ubuntu 20 versions. 
+pybootchartgui-r124.tar.gz with python3.8, python 3.7, python 2.7, python2 also it is not working in 
+ubuntu 16, ubuntu 18, ubuntu 20. 
+And default package of pybootchartgui is also available in ubuntu 16, ubuntu 18, it is also not working.
+Only thing working is the source code from https://github.com/xrmx/bootchart, make it, 
+run in ubuntu 16.04 LTS with python 2, python2.7, if needed you can install 
+pybootchartgui package for required packages to be installed with that, but run the 
+$./pyboochartgui.py ../bootlog.tgz after doing $make in bootchart source code. 
+
+If you want port the pybootchartgui-r124.tar.gz to python3.8, you get the source code from,
+https://code.google.com/archive/p/pybootchartgui/downloads
+------------------------------------------------------------------------------
+To start the anaconda-navigator,
+$~/anaconda3/bin/activate root
+$anaconda-navigator
+$anaconda-navigator &
+
+To start directly jupyter-notebook
+$jupyter-notebook
+$jupyter-notebook &
+----------------------------------------------------------------------------------------
+Executing the command and opening a new terminal command,
+$gnome-terminal -- bash -c 'echo 123;$SHELL'
+----------------------------------------------------------------------------------------
+If ethernet network interface is not detecting in the ubuntu 20.04 host machine,
+$cat /etc/netplan/01-network-manager-all.yaml
+# Let NetworkManager manage all devices on this system
+network:
+version: 2
+renderer: NetworkManager
+
+$nano /etc/netplan/01-netcfg.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      dhcp4: true
+      
+$netplan generate
+$netplan apply
+$ifconfig
+----------------------------------------------------------------------------------------------------
+Linux swapiness,
+$sudo sysctl vm.swappiness=10
+$cat /proc/sys/vm/swappiness 
+$free -h
+$free -m
+$free
+$swaplabel
+$swapon -s
+$swapoff
+$fdisk -l /dev/nvme0n1
+$fdisk -l /dev/nvme0n1*
+$grep swap /etc/fstab
+$blkid
+$sudo mkswap /dev/nvme0n1p7	-> to create new uuid for a swap partition
+$sudo swapon /dev/nvme0n1p7	-> to on the swap partition, make sure /etc/fstab has good UUID of swap partition
+$lsblk
+$df -h
+
+
+
+Linux ram cache clearing,
+1. Clear PageCache only.
+$sync; echo 1 > /proc/sys/vm/drop_caches;sync
+
+2. Clear dentries and inodes.
+$sync; echo 2 > /proc/sys/vm/drop_caches;sync
+
+3. Clear pagecache, dentries, and inodes.
+$sync; echo 3 > /proc/sys/vm/drop_caches;sync
+
+-----------------------------------------------------------------------------
+stop these services before firmware upgrade,
+/etc/init.d/mosquitto stop; /etc/init.d/dl-central-config stop ; /etc/init.d/wireless_watchdog stop ; /etc/init.d/wearable-ctrld stop ; /etc/init.d/ath9k_watchdog stop; /etc/init.d/ath9k_tpcd stop; /etc/init.d/gps_data stop; /etc/init.d/gps_data stop
+----------------------------------------------------------------------------------------------
+iperf gui(java) tool setup,
+1. download iperf and jperf source code from below links,
+https://sourceforge.net/projects/iperf/files/iperf-2.0.5.tar.gz/download
+https://sourceforge.net/projects/iperf/files/jperf/jperf%202.0.0/
+https://sourceforge.net/projects/iperf/files/
+
+2. compile iperf and install
+	$cd iperf-2.0.5
+	$./configure      	--> configure for your machine
+	$make             	--> compile Iperf (if error comes, comment some lines in the file 
+						below based on error lines regrading duplicate) 
+	$vim /usr/include/c++/7/bits/cpp_type_traits.h 
+	/*  
+		template<>
+    		struct __is_integer<bool>
+    		{
+			enum { __value = 1 };
+			typedef __true_type __type;
+		};
+	*/
+	$make
+	$sudo make install	--> install Iperf, if desired
+3. install jdk and run jiperf.sh
+	$sudo apt-get install default-jdk
+	$java -version
+	$javac -version
+	$cd jperf-2.0.0
+	$chmod 777 jperf.sh
+	$./jperf.sh		--> this opens a gui tool with settings.
+4. checking iperf functionality
+	$iperf -s -D 		--> run in a host machine as a server
+	$ping server_ip 	--> run in client host machine
+	$iper -c server_ip 	--> if it is working fine use the same settings in jperf.sh gui tool. 
+5. some other useful menu options on right click on gui graph,
+properties → plot → range → minimum range value 0 and maximum range value 1000, 
+Auto Range, Zoom In, Zoom Out etc. 	
+-------------------------------------------------------------------------------------------------
+human interactive scripts with 'zenity' and 'say',
+https://www.howtogeek.com/435020/how-to-add-a-gui-to-linux-shell-scripts/
+$man zenity
+$zenity --question
+$say "123"
+
+$spd-say Hi
+$spd-say "hehehehe"
+$spd-say -t male1 "hehehehe"
+$spd-say -t male2 "hehehehe"
+$spd-say -t male2 "Hi"
+$spd-say -t male1 "Hi"
+$spd-say -t male3 "Hi"
+$spd-say -t female1 "Hi"
+$spd-say -t female2 "Hi"
+$spd-say -t female3 "Hi"
+$spd-say -t child_male "Hi"
+$spd-say -t child_female "Hi"
+$spd-say -t female1 "Hi"
+$spd-say -t female2 "Hi"
+$spd-say -t female3 "Hi"
+------------------------------------------------------------------------------------------------
+check pic firmware version from lima,
+#sr-ctrl-usb 0 0
+-----------------------------------------------------------------------------------
+Flashing the pic code,
+1. install the MPLabX 5.20, it comes with the MPLAB IPE app too
+2. On Power pane, select VDD: 4.05, then select Power Target circuit from Tool
+3. click on the Operate pane first to select Device PIC16F1459
+4. connect
+5. select hex file in browse and program
+---------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------------
+$tcpdump --help
+$tcpdump -i eth0
+---------------------------------------------------------------
+$cat /proc/interrupts
+$cat /etc/config/firewall
+$cat /etc/config/network
+$cat /etc/config/wireless
+
+-----------------------------------------------------------------------
+DNS and name server,
+# vi /etc/resolv.conf
+  nameserver 208.67.222.222
+  nameserver 208.67.220.220
+  
+$ host google.com
+$ dig google.com
+$ ping google.com
+$ nslookup your-domain.com
+----------------------------------------------------------------------
+$sysutils checklink -d 10 -h 10.223.62.113 -g 3
+$passwd		--> to change login password
+--------------------------------------------------------------------------
+$cat iperf_2022-03-28--040001.log_tmp | grep KBytes | awk '{print $(NF-4)}' | sort -n -r
+------------------------------------------------------------------------------------
+#uci show wireless
+#uci show system
+#iw wlan0 info
+#iw phy0 info
+#fes_model.sh get
+#fes_model.sh get parent
+#cd /usr/share/.sandeeplabs/fes
+#ls
+To shift the frequency quickly(1 to 2 seconds) in the target,
+#echo -120000000 > /sys/kernel/debug/ieee80211/phy0/ath9k/freqshift
+#dl-prism-ctrl -c OP_FREQ -w 2400
+#dl-prism-ctrl 1 5 2400
+#dl-prism-ctrl 0 5
+
+#iw wlan0 set bitrates
+
+#iw phy phy0 interface add mon0 type monitor flags active
+#ip link set dev mon0 up
+-----------------------------------------------------------------
+#dl-prism-ctrl 0 9
+#dl-prism-ctrl 0 15
+----------------------------------------
+$locate file.sh
+$sudo updatedb 	--> update database for all file locations to work with 'locate' command
+------------------------------------------------------------------------------------
+kgdb setup in kernel,
+https://www.open-mesh.org/doc/devtools/Kernel_debugging_with_kgdb.html
+https://www.open-mesh.org/projects/devtools/wiki/Kernel_debugging_with_kgdb
+
+lede/build_dir/target-mips_24kc_musl/linux-ar71xx_generic/linux-4.14.221/.config
+lede/target/linux/ar71xx/config-4.14
+$make kernel_menuconfig
+
+# setup serial splitter:
+$git clone https://git.kernel.org/pub/scm/utils/kernel/kgdb/agent-proxy.git
+$cd ~/agent-proxy
+$make -C ~/agent-proxy
+
+# start agent-proxy on correct serial
+$~/agent-proxy/agent-proxy '127.0.0.1:5550^127.0.0.1:5551' 0 /dev/ttyUSB0,115200
+$screen //telnet localhost 5550
+$cd ~/lede/build_dir/target-mips_24kc_musl/linux-ar71xx_generic/linux-4.14.221/
+$sudo ../../../../staging_dir/toolchain-mips_24kc_gcc-7.5.0_musl/bin/mips-openwrt-linux-gdb -iex "set auto-load safe-path scripts/gdb/" -iex "target remote localhost:5551" ./vmlinux
+
+
+
+(gdb) lx-symbols ..		-> 4 enters
+(gdb) lx-symbols ../../../../staging_dir/target-mips_24kc_musl/root-ar71xx/lib/modules/4.14.221/	-> 4 enters
+(gbd) break ath9k_tx
+break ath9k_start
+break ath9k_stop
+break ath9k_add_interface
+break ath9k_change_interface
+break ath9k_remove_interface
+break ath9k_config
+break ath9k_configure_filter
+break ath9k_sta_state
+break ath9k_sta_notify
+break ath9k_conf_tx
+break ath9k_bss_info_changed
+break ath9k_set_key
+break ath9k_get_tsf
+break ath9k_set_tsf
+break ath9k_reset_tsf
+break ath9k_ampdu_action
+break ath9k_get_survey
+break ath9k_rfkill_poll_state
+break ath9k_set_coverage_class
+break ath9k_flush
+break ath9k_tx_frames_pending
+break ath9k_tx_last_beacon
+break ath9k_release_buffered_frames
+break ath9k_get_stats
+break ath9k_set_antenna
+break ath9k_get_antenna
+
+(gdb) continue
+(gdb) info b
+(gdb) del 4
+(gdb) disass
+(gdb) i r
+-------------------------------------------------------------------
+frequency debugging,
+
+build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/drivers/net/wireless/ath/ath9k/ar9003_phy.c
+printk("Effective freq: %d, centre freq: %d, freq_shift_mhz: %d\n", freq, centers.synth_center, freq_shift_mhz);
+if (freq < 4800) 
+
+Around line #154
+----------------------------------------------------------------------------------------------------
+.bashrc add-ons as below,
+
+#print time on terminal with enter
+PS1='[\D{%H:%M:%S-%d-%m-%Y}]\u@\h:\w$'
+
+#custom commands
+alias git_clone_lede="git clone git@bitbucket.org:sandeeplabs/lede.git"
+alias ssh_testbed1="/home/sandeepraj/ssh_testbed1.sh"
+alias ssh_testbed2="/home/sandeepraj/ssh_testbed2.sh"
+alias scp_testbed1="/home/sandeepraj/scp_testbed1.sh"
+alias scp_testbed2="/home/sandeepraj/scp_testbed2.sh"
+-------------------------------------------------------------------------------------
+$git checkout firmware-2022-02.03
+$./config.sh
+$make -j8
+$cat /dev/kmsg &
+--------------------------------------------------------------------------
+In kali linux building openwrt, 
+gcc version <=10 is required to build openwrt.
+So install gcc-10 and create soft link of gcc in /usr/bin. 
+-----------------------------------------------------------------------
+$dpkg --list | grep compiler
+-------------------------------------------------
+$ssh -o "HostKeyAlgorithms=+ssh-rsa" root@10.223.249.22
+$ssh -oHostKeyAlgorithms=+ssh-rsa root@10.223.249.22
+$ssh -q -o StrictHostKeyChecking=no -o HostKeyAlgorithms=+ssh-rsa root@10.223.62.89 "ifconfig"
+$ssh -q -o "StrictHostKeyChecking=no" -o "HostKeyAlgorithms=+ssh-rsa" root@10.223.62.89 "ifconfig"
+
+
+for scp to target,
+use virtualbox ubuntu connect to target and scp.
+-------------------------------------------------------------------------
+$sudo netstat -anp | grep sshd
+$sudo netstat -anp 
+$sudo netstat -anp | grep sshd
+$sudo iptables -L | grep ssh
+$sudo iptables -L 
+$sudo ufw verbose
+$sudo apt-get install ufw
+$sudo ufw start
+$sudo ufw enable
+$sudo ufw verbose
+$sudo ufw disable
+$sudo ufw verbose
+$lsof -i:22
+$sudo ufw allow 22
+$lsof -i:22
+$sudo netstat -anp | grep sshd
+$sudo netstat -anp | grep ssh
+$sudo service sshd start
+------------------------------------------------------------------
+#echo 0 > /sys/kernel/debug/ieee80211/phy0/ath9k/chanbw
+#iw wlan0 set bitrates ht-mcs-2.4 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 sgi-2.4
+#iw wlan0 set bitrates ht-mcs-2.4 15 sgi-2.4
+#iw wlan0 set txpower fixed 2000	--> for 20dBm
+#sysctl -w net.bridge.bridge-nf-call-arptables=0
+#sysctl -w net.bridge.bridge-nf-call-iptables=0
+#sysctl -w net.bridge.bridge-nf-call-ip6tables=0
+
+4 commands in line,
+echo 0 > /sys/kernel/debug/ieee80211/phy0/ath9k/chanbw;sysctl -w net.bridge.bridge-nf-call-arptables=0;sysctl -w net.bridge.bridge-nf-call-iptables=0;sysctl -w net.bridge.bridge-nf-call-ip6tables=0
+4 commands in line for pancake,
+echo 0 > /sys/kernel/debug/ieee80211/phy1/ath9k/chanbw;sysctl -w net.bridge.bridge-nf-call-arptables=0;sysctl -w net.bridge.bridge-nf-call-iptables=0;sysctl -w net.bridge.bridge-nf-call-ip6tables=0
+-----------------------------------------------------------------------
+$rmlint
+$ncdu
+$btop	-> press p to see different preset views
+$ntfy send "hello"
+-------------------------------------------------------------------------
+$echo "$SHELL"
+$cat /etc/shells
+$chsh
+----------------------------------------------
+$ssh user@fe80::21b:21ff:fe22:e865%eth0
+--------------------------------------------------
+In host,
+$sudo apt install openssh-server
+$sudo service ssh status
+$sudo service ssh start
+
+In target,
+# /bin/dropbearkey -t rsa -f /etc/dropbear/dropbear.rsa
+# dropbearkey -y -f /etc/dropbear/dropbear_rsa_host_key | grep ssh-rsa
+-------------------------------------------------------------------------------------
+$ffmpeg -i input_file.webm output_filename.mp4
+-----------------------------------------------------------
+print colours in shell script,
+#!/bin/bash
+bold=$(tput bold)
+underline=$(tput smul)
+italic=$(tput sitm)
+info=$(tput setaf 2)
+error=$(tput setaf 160)
+warn=$(tput setaf 214)
+reset=$(tput sgr0)
+echo "${info}INFO${reset}: This is an ${bold}info${reset} message"
+echo "${error}ERROR${reset}: This is an ${underline}error${reset} message"
+echo "${warn}WARN${reset}: This is a ${italic}warning${reset} message"
+----------------------------------------------------------------------------------
+print function name in shell script,
+abc() {
+	echo "Starting of $FUNCNAME"
+}
+abc 123 
+-------------------------------------------------------------------------------------------------------------------------------------
+zenity usage,
+
+#!/bin/bash
+
+var=$(zenity --calendar)
+echo $var
+var=$(zenity --entry --title "Name request" --text "Please enter your name:")
+echo $var
+var=$(zenity --file-selection --multiple --filename "${HOME}/")
+echo $var
+var=$(zenity --file-selection --save --confirm-overwrite --filename "${HOME}/")
+echo $var
+
+#
+# Below Dummy script to demonstrate the zenity progress widget!
+
+var= $( (
+  echo 25
+  echo "# Setting up..."
+  sleep 2
+
+  echo 30
+  echo "# Reading files..."
+  sleep 2
+
+  echo 70
+  echo "# Creating content..."
+  sleep 1
+
+  echo 100
+  echo "# Done!"
+  ) | zenity --title "Progress bar example" --progress --auto-kill)
+echo $var
+
+var=$(zenity --info --width=400 --height=200 --text "This is a notification!")
+echo $var
+var=$(zenity --warning --width=400 --height=200 --text "This is a warning!")
+echo $var
+var=$(zenity --error --width=400 --height=200 --text "This is an error!")
+echo $var
+#var=$(zenity --question --text "Are you sure you want to quit?" --no-wrap --ok-label "Yes" --cancel-label "No")
+#echo $var
+zenity --question --text="Do you want to answer stupid questions?"
+var=$? 
+if [[ $var == 0 ]]; then
+	echo "Yes"
+else
+	echo "No"
+fi
+
+var=$(zenity --password --username)
+case $? in
+         0)
+	 	echo "User Name: `echo $var | cut -d'|' -f1`"
+	 	echo "Password : `echo $var | cut -d'|' -f2`"
+		;;
+         1)
+                echo "Stop login.";;
+        -1)
+                echo "An unexpected error has occurred.";;
+esac
+echo $var
+
+
+var=$(zenity --color-selection --color red --show-palette)
+echo $var
+var=$(zenity --list --column Selection --column Distribution 1 Debian 2 Fedora 3 Ubuntu)
+echo $var
+------------------------------------------------------------------------------------------------------------------------------------------------
+$cat /etc/os-release
+$lsb_release -a
+----------------------------------------
+build_dir/target-mips_24kc_musl/linux-ar71xx_generic/backports-4.19.161-1/drivers/net/wireless/ath/ath9k/ar9003_phy.c    
+printk("Effective freq: %d, centre freq: %d, freq_shift_mhz: %d\n", freq, centers.synth_center, freq_shift_mhz);    
+if (freq < 4800) 
+
+Around line #148
+--------------------------------------------------------------------------
+production code calibration execution command,
+flash tx99 image into target,
+$cd /mnt/99517925-b541-4d44-a754-aae86a462359/production_code/calibration/calibration_code_dl-smartradio-productionutilities-v4_SG_172513062022_v0.02/MB-0001-2L-X
+$./main_h 1
+-------------------------------------------------------------------------------------
+calibration commands,
+#!/bin/ash
+#echo $power > /sys/kernel/debug/ieee80211/phy0/ath9k/tx99_power
+#iw dev mon0 set freq $1 HT20
+#echo 1  > /sys/kernel/debug/ieee80211/phy1/ath9k/tx99
+#echo 0  > /sys/kernel/debug/ieee80211/phy1/ath9k/tx99
+#iw dev mon0 set bitrates ht-mcs-2.4 $1
+#iw dev mon0 set bitrates legacy-2.4 $1
+
+#iwinfo mon0 htmodelist
+--------------------------------------------------------------------------------------------
+ssh and scp enable in kali linux,
+install openssh-server
+$sudo service ssh status
+$sudo systemctl start ssh
+$sudo service ssh status
+
+$sudo systemctl enable ssh --> to make ssh service enabled on bootup
+----------------------------------------------------------------------------
+speed up the ssh connection,
+$cd .ssh
+$mkdir -p controlmasters
+sandeep@sandeeppc20-GK41:~/.ssh$ cat config
+Host *
+    StrictHostKeyChecking no
+    ControlPersist 60m
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%C
+
+$chmod 400 config
+---------------------------------------------------------
+$zip -q -r file.zip folder
+------------------------------------
+connect to server in explorer,
+sftp://10.223.1.10
+---------------------------------------------------
+get ip from mac of the target,
+#.  /usr/share/simpleconfig/get_ip_from_mac.sh
+----------------------------------------------------------
+In windows case sensitive issue for openwrt,
+PS C:\WINDOWS\system32> fsutil.exe file queryCaseSensitiveInfo F:\all\
+Case sensitive attribute on directory F:\all\ is disabled.
+PS C:\WINDOWS\system32> fsutil.exe file setCaseSensitiveInfo F:\all\ enable
+Case sensitive attribute on directory F:\all\ is enabled.
+PS C:\WINDOWS\system32>
+------------------------------------------------------------------------------
+In ubuntu below step help to search previously used commands easily,
+$vim /etc/inputrc
+# alternate mappings for "page up" and "page down" to search the history
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+
+or one can use Ctrl+R to search in previously used commands and press enter to execute.
+--------------------------------------------------------
+while infinite loop in shell script,
+$while true;do sleep 0.001;cat /proc/meminfo | grep Buffers;done
+----------------------------------------------------------------------
+hexdump of a file,
+$hexdump -C /opt/keep_value
+---------------------------------------------------------------------
+$grep "PROFILE CONFIGURATION:" -r ./*

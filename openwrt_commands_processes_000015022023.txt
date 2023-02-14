@@ -1663,8 +1663,8 @@ UseSTARTTLS=YES
 FromLineOverride=YES
 root=admin@example.com
 mailhub=smtp.gmail.com:587
-AuthUser=sw-dev-updates@doodlelabs.com
-AuthPass=Doodlelab5
+AuthUser=sw-dev-updates@sandeeplabs.com
+AuthPass=sandeepsfk
 
 Login to your gmail account.
 Go to https://www.google.com/settings/security/lesssecureapps and Turn On this feature.
@@ -1674,7 +1674,7 @@ $cat email.txt
 Subject: Sending email using sendmail
 Testing email body
 
-$sendmail sandeep.betanapalli@doodlelabs.com < email.txt
+$sendmail sandeep.betanapalli@sandeeplabs.com < email.txt
 
 To send attachments,
 $vim email.txt
@@ -1687,7 +1687,7 @@ $uuencode file1.sh file1.sh > ENCODED1
 $uuencode file2.pdf file2.pdf > ENCODED2
 $uuencode file3.sh file3.sh > ENCODED3
 $cat email.txt ENCODED1 ENCODED2 ENCODED3 > COMBOFILE
-$sendmail sandeep.betanapalli@doodlelabs.com < COMBOFILE
+$sendmail sandeep.betanapalli@sandeeplabs.com < COMBOFILE
 ---------------------------------------------------------------------------------------------------------
 to solve error,
 sign_and_send_pubkey: signing failed: agent refused operation
